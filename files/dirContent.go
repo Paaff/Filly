@@ -17,7 +17,7 @@ type Content struct {
 }
 
 // Get directory Content and return
-func getDirectoryInput(dir string) []byte {
+func getDirectoryContentInJSON(dir string) []byte {
 	// Retrieve all the files in the input directory
 	files, err := ioutil.ReadDir(dir)
 	if err != nil {
