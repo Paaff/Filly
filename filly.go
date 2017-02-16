@@ -1,7 +1,19 @@
 package main
 
-import "fmt"
+import (
+	"log"
+	"net/http"
+)
 
 func main() {
-	fmt.Println("Hello Filly")
+
+	// Create a simple file server
+	fs := http.FileServer(http.Dir("./web"))
+	http.Handle("/", fs)
+
+	err := http.ListenAndServe(":1337", nil)
+	if err != nil {
+		log.Fatal("ListenAndServe: ", err)
+	}
+
 }
