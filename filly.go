@@ -10,7 +10,7 @@ var ROOT_DIR string = ""
 
 func main() {
 
-	// Create a simple file server
+	//Create a simple file server
 	fs := http.FileServer(http.Dir("./web"))
 	http.Handle("/", fs)
 
