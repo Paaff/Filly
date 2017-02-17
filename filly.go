@@ -5,6 +5,9 @@ import (
 	"net/http"
 )
 
+// Root directory global variable
+var ROOT_DIR string = ""
+
 func main() {
 
 	// Create a simple file server
@@ -16,4 +19,10 @@ func main() {
 		log.Fatal("ListenAndServe: ", err)
 	}
 
+}
+
+// Set the root director.
+func setRootDir(newRootDir string) {
+	//TODO: Where does sanitating user input happen?
+	ROOT_DIR = newRootDir
 }
