@@ -9,7 +9,7 @@ import (
 )
 
 // Root directory global variable
-var ROOT_DIR string = "E:\\Pete\\Documents"
+var ROOT_DIR string = "E:\\Media"
 
 func main() {
 
