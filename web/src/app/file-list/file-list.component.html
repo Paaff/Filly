@@ -1,24 +1,19 @@
+<a (click)="back()" class="button button-primary" href="#">Go Back</a>
 <table class="u-full-width">
   <thead>
     <tr>
       <th>Name</th>
       <th>Type</th>
       <th>Size</th>
-      <th>Extension</th>
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let file of files">
+    <tr *ngFor="let file of files" (click)="gotoFolder(file)">
       <td>{{file.name}}</td>
       <td>{{file.type}}</td>
       <td>{{file.size}}</td>
-      <td>{{file.extension}}</td>
-    </tr>
-    <tr>
-      <td>Dwayne Johnson</td>
-      <td>42</td>
-      <td>Male</td>
-      <td>Hayward</td>
     </tr>
   </tbody>
 </table>
+
+<a (click)="test()" class="button button-primary" href="#">Test Files</a>

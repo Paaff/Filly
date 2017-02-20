@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpModule } from '@angular/http';
 import { FillyService } from '../filly.service';
-import { File } from '../file';
+import { FileItem } from '../file-item';
 
 @Component({
   selector: 'file-list',
@@ -10,7 +10,8 @@ import { File } from '../file';
 })
 export class FileListComponent implements OnInit {
 
-  files: File[]
+  path: string[] = [];
+  files: FileItem[];
 
   constructor(private http: HttpModule, private filly: FillyService) { }
 
@@ -18,10 +19,37 @@ export class FileListComponent implements OnInit {
   	this.getFiles('')
   }
 
+  test() {
+  	console.log(this.files)
+  }
+
+  gotoFolder(file?: FileItem) {
+  	if (file && file.type != 'folder') return
+  	if (file) {
+      let folder = file.path.split(/[\\/]/).pop()
+  	  this.path.push(folder)
+  	}
+  	console.log("Going to folder", this.path.join('\\'))
+  	this.filly.getFiles(this.path.join('\\')).subscribe(
+  		files => this.files = files,
+  		this.onError
+  	)
+  }
+
+  back() {
+  	this.path.pop()
+  	this.gotoFolder()
+  }
+
   getFiles(path: string) {
   	this.filly.getFiles(path).subscribe(
-  		files => this.files = files
+  		files => this.files = files,
+  		this.onError
   	)
+  }
+
+  private onError(err) {
+  	console.error(err)
   }
 
 }
