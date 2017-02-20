@@ -14,7 +14,7 @@ var ROOT_DIR string = "E:\\Pete\\Documents"
 func main() {
 
 	// Create a simple file server
-	fs := http.FileServer(http.Dir("./web"))
+	fs := http.FileServer(http.Dir("./web/dist"))
 	http.Handle("/", fs)
 
 	// GetDir endpoint
