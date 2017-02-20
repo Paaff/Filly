@@ -11,10 +11,10 @@ import (
 
 // Directory content struct
 type Content struct {
-	Name string
-	Path string
-	Size int64
-	Type string
+	Name string `json:"name"`
+	Path string `json:"path"`
+	Size int64  `json:"size"`
+	Type string `json:"type"`
 }
 
 // Path struct for unmarshalling JSON array of paths.
@@ -23,7 +23,7 @@ type Path struct {
 }
 
 // Get directory Content and return a JSON-encoded string
-func GetDirectoryContentInJSON(dir string) []byte {
+func GetDirectoryContentInJSON(dir string) []Content {
 	// Retrieve all the files in the input directory
 	files, err := ioutil.ReadDir(dir)
 	if err != nil {
@@ -43,17 +43,14 @@ func GetDirectoryContentInJSON(dir string) []byte {
 			Size: file.Size(),
 			Type: ext}
 
+		// Is content folder?
+		if c.Type == "" {
+			c.Type = "folder"
+		}
 		listOfContent = append(listOfContent, c)
 	}
 
-	// Marshall a JSON-encoded string of the listOfContent
-	mList, err := json.Marshal(listOfContent)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	return mList
-
+	return listOfContent
 }
 
 // Delete user-chosen content from given directory.
