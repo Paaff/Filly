@@ -37,10 +37,10 @@ func GetDirectoryContentInJSON(dir string) []Content {
 
 		ext := filepath.Ext(file.Name())
 		name := strings.TrimSuffix(file.Name(), ext)
-		fullPath := []string{dir, "\\", file.Name()} // TODO: Must be a better way to do this. Look into filepath package.
+		fullPath := filepath.Join(dir, file.Name())
 		c := Content{
 			Name: name,
-			Path: strings.Join(fullPath, ""),
+			Path: fullPath,
 			Size: file.Size(),
 			Type: ext}
 
