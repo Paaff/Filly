@@ -2,14 +2,12 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 
 	"github.com/paaff/Filly/files"
 )
-
-// Root directory global variable
-var ROOT_DIR string = "E:\\Media"
 
 func main() {
 
@@ -30,17 +28,20 @@ func main() {
 func browseHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 		path := r.FormValue("path")
-		if path != "" {
-			// Browse from the POST form variable
-			json.NewEncoder(w).Encode(dirContent.GetDirectoryContentInJSON(path))
+		// Browse from the POST form variable
+		cont, status := dirContent.GetDirectoryContentInJSON(path)
+		if cont != nil {
+			json.NewEncoder(w).Encode(cont)
+		} else {
+			// Error handling.
+			errorHandler(w, r, status)
 		}
-
 	}
-
 }
 
-// Set the root director.
-func setRootDir(newRootDir string) {
-	//TODO: Where does sanitating user input happen?
-	ROOT_DIR = newRootDir
+func errorHandler(w http.ResponseWriter, r *http.Request, status int) {
+	w.WriteHeader(status)
+	if status == 404 {
+		fmt.Fprint(w, "404 - NOT FOUND")
+	}
 }

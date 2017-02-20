@@ -9,6 +9,9 @@ import (
 	"strings"
 )
 
+// Root directory global variable
+var ROOT_DIR string = "E:\\Pete\\Documents"
+
 // Directory content struct
 type Content struct {
 	Name string `json:"name"`
@@ -23,21 +26,23 @@ type Path struct {
 }
 
 // Get directory Content and return a JSON-encoded string
-func GetDirectoryContentInJSON(dir string) []Content {
-	// Retrieve all the files in the input directory
-	files, err := ioutil.ReadDir(dir)
-	if err != nil {
-		log.Fatal(err)
-	}
+func GetDirectoryContentInJSON(dir string) ([]Content, int) {
 
+	fullDir := filepath.Join(ROOT_DIR, dir)
 	var listOfContent []Content
+
+	// Retrieve all the files in the input directory
+	files, err := ioutil.ReadDir(fullDir)
+	if err != nil {
+		return listOfContent, 404 // Status 404 is path not available
+	}
 
 	// Create a Content struct for each file and append it to a Content list.
 	for _, file := range files {
 
 		ext := filepath.Ext(file.Name())
 		name := strings.TrimSuffix(file.Name(), ext)
-		fullPath := filepath.Join(dir, file.Name())
+		fullPath := filepath.Join(fullDir, file.Name())
 		c := Content{
 			Name: name,
 			Path: fullPath,
@@ -51,13 +56,13 @@ func GetDirectoryContentInJSON(dir string) []Content {
 		listOfContent = append(listOfContent, c)
 	}
 
-	return listOfContent
+	return listOfContent, 0
 }
 
 // Delete user-chosen content from given directory.
 func deleteSelectedContentFromDir(jsonSelected []byte) bool {
 	var paths []Path
-	jsonErr := json.Unmarshal(jsonSelected, &paths)
+	jsonErr := json.Unmarshal(jsonSelected, &paths) //TODO: Use Decoder
 	if jsonErr != nil {
 		log.Fatal(jsonErr)
 	}
