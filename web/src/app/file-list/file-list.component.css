@@ -1,0 +1,15 @@
+th {
+	padding: .5rem;
+}
+
+tbody tr {
+	-webkit-user-select: none;  	/* Chrome all / Safari all */
+    -moz-user-select: none;     	/* Firefox all */
+    z-indexms-user-select: none;    /* IE 10+ */
+  	user-select: none;          	/* Likely future */
+  	cursor: pointer
+}
+
+td {
+	padding: .5rem;
+}

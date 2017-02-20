@@ -31,6 +31,7 @@ func browseHandler(w http.ResponseWriter, r *http.Request) {
 		// Browse from the POST form variable
 		cont, status := dirContent.GetDirectoryContentInJSON(path)
 		if cont != nil {
+			w.Header().Set("Content-Type", "application/json")
 			json.NewEncoder(w).Encode(cont)
 		} else {
 			// Error handling.
