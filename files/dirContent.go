@@ -34,9 +34,10 @@ func GetDirectoryContentInJSON(dir string) []Content {
 
 	// Create a Content struct for each file and append it to a Content list.
 	for _, file := range files {
+
 		ext := filepath.Ext(file.Name())
 		name := strings.TrimSuffix(file.Name(), ext)
-		fullPath := []string{dir, "\\", file.Name()} // TODO: Check if it means anything to declare the slice before the for loop.
+		fullPath := []string{dir, "\\", file.Name()} // TODO: Must be a better way to do this. Look into filepath package.
 		c := Content{
 			Name: name,
 			Path: strings.Join(fullPath, ""),

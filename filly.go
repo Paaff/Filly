@@ -28,8 +28,15 @@ func main() {
 }
 
 func browseHandler(w http.ResponseWriter, r *http.Request) {
-	// Browse from the ROOT_DIR variable
-	json.NewEncoder(w).Encode(dirContent.GetDirectoryContentInJSON(ROOT_DIR))
+	if r.Method == "POST" {
+		path := r.FormValue("path")
+		if path != "" {
+			// Browse from the POST form variable
+			json.NewEncoder(w).Encode(dirContent.GetDirectoryContentInJSON(path))
+		}
+
+	}
+
 }
 
 // Set the root director.
