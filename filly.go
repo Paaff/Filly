@@ -44,4 +44,5 @@ func errorHandler(w http.ResponseWriter, r *http.Request, status int) {
 	if status == 404 {
 		fmt.Fprint(w, "404 - NOT FOUND")
 	}
+
 }

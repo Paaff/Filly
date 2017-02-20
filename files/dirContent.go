@@ -29,14 +29,14 @@ type Path struct {
 func GetDirectoryContentInJSON(dir string) ([]Content, int) {
 
 	fullDir := filepath.Join(ROOT_DIR, dir)
-	var listOfContent []Content
 
 	// Retrieve all the files in the input directory
 	files, err := ioutil.ReadDir(fullDir)
 	if err != nil {
-		return listOfContent, 404 // Status 404 is path not available
+		return nil, 404 // Status 404 is path not available
 	}
 
+	var listOfContent []Content
 	// Create a Content struct for each file and append it to a Content list.
 	for _, file := range files {
 
