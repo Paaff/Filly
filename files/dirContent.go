@@ -47,12 +47,11 @@ func GetDirectoryContentInJSON(dir string) ([]Content, int) {
 		if file.IsDir() {
 			ext = "folder"
 			name = file.Name()
-			fullPath = filepath.Join(fullDir, file.Name())
 		} else {
 			ext = filepath.Ext(file.Name())
 			name = strings.TrimSuffix(file.Name(), ext)
-			fullPath = filepath.Join(fullDir, file.Name())
 		}
+		fullPath = filepath.Join(fullDir, file.Name())
 		c := Content{
 			Name: name,
 			Path: fullPath,
