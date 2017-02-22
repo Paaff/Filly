@@ -1,4 +1,4 @@
-package dirContent
+package content
 
 import (
 	"encoding/json"
@@ -10,7 +10,7 @@ import (
 )
 
 // Root directory global variable
-var ROOT_DIR string = "E:\\Media"
+var ROOT_DIR string
 
 // Directory content struct
 type Content struct {
