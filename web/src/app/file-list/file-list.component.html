@@ -1,5 +1,5 @@
 <a (click)="back()" class="button button-primary" href="#">Go Back</a>
-<table class="u-full-width">
+<table class="u-full-width" (contextmenu)="fileMenu($event)">
   <thead>
     <tr>
       <th>Name</th>

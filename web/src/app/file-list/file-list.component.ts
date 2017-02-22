@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpModule } from '@angular/http';
 import { FillyService } from '../filly.service';
 import { FileItem } from '../file-item';
+import { ContextMenuService } from '../context-menu.service';
 
 @Component({
   selector: 'file-list',
@@ -13,7 +14,9 @@ export class FileListComponent implements OnInit {
   path: string[] = [];
   files: FileItem[];
 
-  constructor(private http: HttpModule, private filly: FillyService) { }
+  constructor(private http: HttpModule, 
+  	private filly: FillyService,
+  	private menu: ContextMenuService) { }
 
   ngOnInit() {
   	this.getFiles('')
@@ -21,6 +24,13 @@ export class FileListComponent implements OnInit {
 
   test() {
   	console.log(this.files)
+  	this.menu.showMenu(50,50)
+  }
+
+  fileMenu(event) {
+  	console.log("Right click", event)
+  	event.preventDefault()
+  	this.menu.showMenu(event.clientX, event.clientY)
   }
 
   gotoFolder(file?: FileItem) {
