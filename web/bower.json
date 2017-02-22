@@ -1,0 +1,21 @@
+{
+  "name": "filly",
+  "description": "",
+  "main": "index.html",
+  "authors": [
+    "Mathias <tympanix@gmail.com>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/Paaff/Filly",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "skeleton": "^2.0.4"
+  }
+}
