@@ -2,3 +2,6 @@
 @import url("../bower_components/skeleton/css/skeleton.css");
 @import url("../bower_components/skeleton/css/normalize.css");
 
+html {
+  overflow-y: scroll;
+}

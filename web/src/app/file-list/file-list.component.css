@@ -11,5 +11,15 @@ tbody tr {
 }
 
 td {
+	height: 2em;
 	padding: .5rem;
+}
+
+input.rename {
+	max-height: 2em;
+}
+
+form {
+	margin: 0;
+	padding: 0;
 }

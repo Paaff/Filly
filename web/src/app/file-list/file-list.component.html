@@ -1,15 +1,25 @@
 <a (click)="back()" class="button button-primary" href="#">Go Back</a>
-<table class="u-full-width" (contextmenu)="fileMenu($event)">
+<table class="u-full-width">
   <thead>
     <tr>
-      <th>Name</th>
+      <th class="">Name</th>
       <th>Type</th>
       <th>Size</th>
     </tr>
   </thead>
-  <tbody>
-    <tr *ngFor="let file of files" (click)="gotoFolder(file)">
-      <td>{{file.name}}</td>
+  <tbody (contextmenu)="fileMenu($event)">
+    <tr *ngFor="let file of files" (dblclick)="gotoFolder(file)">
+      <td *ngIf="!file.edit">
+      	<span (click)="file.edit = true">{{file.name}}</span>
+      </td>
+      <td *ngIf="file.edit">
+      <form (submit)="file.edit = false">
+      	<input class="rename" name="rename" autofocus type="text" 
+      		(submit)="file.edit = false" 
+      		(blur)="file.edit = false" 
+      		[ngModel]="file.name">
+      </form>
+      </td>
       <td>{{file.type}}</td>
       <td>{{file.size}}</td>
     </tr>
