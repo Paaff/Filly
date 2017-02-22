@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/paaff/Filly/error"
 	"github.com/paaff/Filly/files"
 	"github.com/spf13/viper"
 )
@@ -19,7 +20,7 @@ func main() {
 	http.Handle("/", fs)
 
 	// GetDir endpoint
-	http.Handle("/browse", appHandler(browseHandler))
+	http.Handle("/browse", errorhandler.AppHandler(browseHandler))
 
 	err := http.ListenAndServe(":1337", nil)
 	if err != nil {
@@ -41,28 +42,13 @@ func loadConfig() {
 	}
 }
 
-// Custom error created for handling HTTP errors more fluently.
-type appError struct {
-	Error   error
-	Message string
-	Code    int
-}
-
-type appHandler func(http.ResponseWriter, *http.Request) *appError
-
-func (fn appHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	if e := fn(w, r); e != nil { // e is *appError, not os.Error.
-		http.Error(w, e.Message, e.Code)
-	}
-}
-
-func browseHandler(w http.ResponseWriter, r *http.Request) *appError {
+func browseHandler(w http.ResponseWriter, r *http.Request) *errorhandler.AppError {
 	if r.Method == "POST" {
 		path := r.FormValue("path")
 		// Browse from the POST form variable
 		cont, err := content.GetDirectoryContentInJSON(path)
 		if err != nil {
-			return &appError{err, "Content cannot be found", 404} // Status: Not Found
+			return &errorhandler.AppError{err, "Content cannot be found", 404} // Status: Not Found
 		}
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(cont)
