@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ContextMenuService } from './context-menu.service';
+import { ContextMenuService } from './context-menu/context-menu.service';
 
 @Component({
   selector: 'app-root',

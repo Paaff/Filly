@@ -6,7 +6,7 @@ import { HttpModule } from '@angular/http';
 import { AppComponent } from './app.component';
 import { FileListComponent } from './file-list/file-list.component';
 import { FillyService } from './filly.service';
-import { ContextMenuService } from './context-menu.service';
+import { ContextMenuService } from './context-menu/context-menu.service';
 import { ContextMenuComponent } from './context-menu/context-menu.component';
 
 @NgModule({

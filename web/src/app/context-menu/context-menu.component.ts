@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ContextMenuService } from '../context-menu.service';
+import { ContextMenuService } from './context-menu.service';
 
 @Component({
   selector: 'context-menu',

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpModule } from '@angular/http';
 import { FillyService } from '../filly.service';
 import { FileItem } from '../file-item';
-import { ContextMenuService } from '../context-menu.service';
+import { ContextMenuService } from '../context-menu/context-menu.service';
 
 @Component({
   selector: 'file-list',
