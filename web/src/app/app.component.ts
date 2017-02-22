@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ContextMenuService } from './context-menu.service';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +7,11 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'Filly - the cool web file browser!';
+  constructor(private menu: ContextMenuService) {
+
+  }
+
+  hideContextMenu(event) {
+  	this.menu.hideMenu()
+  }
 }
