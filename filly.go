@@ -12,22 +12,14 @@ import (
 
 func main() {
 	// Load configuration file
-	viper.SetConfigName("fillyconf")
-	viper.SetConfigType("json")
-	viper.AddConfigPath("./config")
-	vErr := viper.ReadInConfig()
-	if vErr != nil {
-		panic(fmt.Errorf("Fatal error config file: %s \n", vErr))
-	} else {
-		content.ROOT_DIR = viper.GetString("root_dir")
-	}
+	loadConfig()
 
 	// Create a simple file server
 	fs := http.FileServer(http.Dir("./web/dist"))
 	http.Handle("/", fs)
 
 	// GetDir endpoint
-	http.HandleFunc("/browse", browseHandler)
+	http.Handle("/browse", appHandler(browseHandler))
 
 	err := http.ListenAndServe(":1337", nil)
 	if err != nil {
@@ -36,25 +28,44 @@ func main() {
 
 }
 
-func browseHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method == "POST" {
-		path := r.FormValue("path")
-		// Browse from the POST form variable
-		cont, status := content.GetDirectoryContentInJSON(path)
-		if cont != nil {
-			w.Header().Set("Content-Type", "application/json")
-			json.NewEncoder(w).Encode(cont)
-		} else {
-			// Error handling.
-			errorHandler(w, r, status)
-		}
+// Loads a config
+func loadConfig() {
+	viper.SetConfigName("fillyconf")
+	viper.SetConfigType("json")
+	viper.AddConfigPath("./config")
+	err := viper.ReadInConfig()
+	if err != nil {
+		panic(fmt.Errorf("Fatal error config file: %s \n", err))
+	} else {
+		content.ROOT_DIR = viper.GetString("root_dir")
 	}
 }
 
-func errorHandler(w http.ResponseWriter, r *http.Request, status int) {
-	w.WriteHeader(status)
-	if status == 404 {
-		fmt.Fprint(w, "404 - NOT FOUND")
-	}
+// Custom error created for handling HTTP errors more fluently.
+type appError struct {
+	Error   error
+	Message string
+	Code    int
+}
 
+type appHandler func(http.ResponseWriter, *http.Request) *appError
+
+func (fn appHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	if e := fn(w, r); e != nil { // e is *appError, not os.Error.
+		http.Error(w, e.Message, e.Code)
+	}
+}
+
+func browseHandler(w http.ResponseWriter, r *http.Request) *appError {
+	if r.Method == "POST" {
+		path := r.FormValue("path")
+		// Browse from the POST form variable
+		if cont, err := content.GetDirectoryContentInJSON(path); err != nil {
+			return &appError{err, "Content cannot be found", 404} // Status: Not Found
+		} else {
+			w.Header().Set("Content-Type", "application/json")
+			json.NewEncoder(w).Encode(cont)
+		}
+	}
+	return nil
 }

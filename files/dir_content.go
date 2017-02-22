@@ -26,14 +26,14 @@ type Path struct {
 }
 
 // Get directory Content and return a JSON-encoded string
-func GetDirectoryContentInJSON(dir string) ([]Content, int) {
+func GetDirectoryContentInJSON(dir string) ([]Content, error) {
 
 	fullDir := filepath.Join(ROOT_DIR, dir)
 
 	// Retrieve all the files in the input directory
 	files, err := ioutil.ReadDir(fullDir)
 	if err != nil {
-		return nil, 404 // Status 404 is path not available
+		return nil, err
 	}
 
 	// Create a Content struct for each file and append it to a Content list.
@@ -61,7 +61,7 @@ func GetDirectoryContentInJSON(dir string) ([]Content, int) {
 		listOfContent = append(listOfContent, c)
 	}
 
-	return listOfContent, 0
+	return listOfContent, nil
 }
 
 // Delete user-chosen content from given directory.
