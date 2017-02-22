@@ -12,7 +12,7 @@ import (
 
 func main() {
 	// Load configuration file
-	viper.SetConfigName("fillyExampleConf")
+	viper.SetConfigName("fillyConf")
 	viper.SetConfigType("json")
 	viper.AddConfigPath("./config")
 	vErr := viper.ReadInConfig()
