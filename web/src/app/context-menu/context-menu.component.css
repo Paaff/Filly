@@ -1,5 +1,22 @@
-div {
+div.contextmenu {
+	border-radius: 0.4em;
 	position: absolute;
-	padding: 2rem;
-	background-color: red;
+	background-color: #f8f8f8;
+	min-width: 12em;
+	overflow: hidden;
+	box-shadow: 0 0 1em rgba(0,0,0,0.1)
+}
+
+.item {
+	padding: .5em 1em;
+	cursor: pointer;
+	border-bottom: solid 1px #ddd;
+}
+
+.item:hover {
+	background-color: rgba(0,0,0,0.1);
+}
+
+.item:last-child {
+	border: none;
 }
