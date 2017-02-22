@@ -10,7 +10,7 @@ import (
 )
 
 // Root directory global variable
-var ROOT_DIR string = "E:\\Media"
+var ROOT_DIR string = "E:\\Pete\\Documents"
 
 // Directory content struct
 type Content struct {
@@ -36,23 +36,29 @@ func GetDirectoryContentInJSON(dir string) ([]Content, int) {
 		return nil, 404 // Status 404 is path not available
 	}
 
-	var listOfContent []Content
 	// Create a Content struct for each file and append it to a Content list.
-	for _, file := range files {
+	var listOfContent []Content
+	var ext string
+	var name string
+	var fullPath string
 
-		ext := filepath.Ext(file.Name())
-		name := strings.TrimSuffix(file.Name(), ext)
-		fullPath := filepath.Join(fullDir, file.Name())
+	for _, file := range files {
+		// Determine whether it is a file or a folder
+		if file.IsDir() {
+			ext = "folder"
+			name = file.Name()
+			fullPath = filepath.Join(fullDir, file.Name())
+		} else {
+			ext = filepath.Ext(file.Name())
+			name = strings.TrimSuffix(file.Name(), ext)
+			fullPath = filepath.Join(fullDir, file.Name())
+		}
 		c := Content{
 			Name: name,
 			Path: fullPath,
 			Size: file.Size(),
 			Type: ext}
 
-		// Is content folder?
-		if c.Type == "" {
-			c.Type = "folder"
-		}
 		listOfContent = append(listOfContent, c)
 	}
 
