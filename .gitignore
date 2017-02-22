@@ -85,3 +85,6 @@ typings/
 
 # Angular2
 dist
+
+# ExampleConf
+fillyconf.json
