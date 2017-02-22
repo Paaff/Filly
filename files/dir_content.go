@@ -1,4 +1,4 @@
-package dirContent
+package content
 
 import (
 	"encoding/json"
