@@ -60,12 +60,13 @@ func browseHandler(w http.ResponseWriter, r *http.Request) *appError {
 	if r.Method == "POST" {
 		path := r.FormValue("path")
 		// Browse from the POST form variable
-		if cont, err := content.GetDirectoryContentInJSON(path); err != nil {
+		cont, err := content.GetDirectoryContentInJSON(path)
+		if err != nil {
 			return &appError{err, "Content cannot be found", 404} // Status: Not Found
-		} else {
-			w.Header().Set("Content-Type", "application/json")
-			json.NewEncoder(w).Encode(cont)
 		}
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(cont)
+
 	}
 	return nil
 }
