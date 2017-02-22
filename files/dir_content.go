@@ -7,6 +7,8 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/paaff/Filly/error"
 )
 
 // Root directory global variable
@@ -26,21 +28,19 @@ type Path struct {
 }
 
 // Get directory Content and return a JSON-encoded string
-func GetDirectoryContentInJSON(dir string) ([]Content, error) {
+func GetDirectoryContentInJSON(dir string) ([]Content, *errorhandler.AppError) {
 
 	fullDir := filepath.Join(ROOT_DIR, dir)
-
 	// Retrieve all the files in the input directory
 	files, err := ioutil.ReadDir(fullDir)
 	if err != nil {
-		return nil, err
+		return nil, &errorhandler.AppError{err, "Content cannot be found", 404} // Status: Not Found
 	}
 
 	// Create a Content struct for each file and append it to a Content list.
 	var listOfContent []Content
 	var ext string
 	var name string
-	var fullPath string
 
 	for _, file := range files {
 		// Determine whether it is a file or a folder
@@ -51,7 +51,7 @@ func GetDirectoryContentInJSON(dir string) ([]Content, error) {
 			ext = filepath.Ext(file.Name())
 			name = strings.TrimSuffix(file.Name(), ext)
 		}
-		fullPath = filepath.Join(fullDir, file.Name())
+		fullPath := filepath.Join(fullDir, file.Name())
 		c := Content{
 			Name: name,
 			Path: fullPath,
