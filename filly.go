@@ -19,7 +19,7 @@ func main() {
 	if vErr != nil {
 		panic(fmt.Errorf("Fatal error config file: %s \n", vErr))
 	} else {
-		dirContent.ROOT_DIR = viper.GetString("root_dir")
+		content.ROOT_DIR = viper.GetString("root_dir")
 	}
 
 	// Create a simple file server
@@ -40,7 +40,7 @@ func browseHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 		path := r.FormValue("path")
 		// Browse from the POST form variable
-		cont, status := dirContent.GetDirectoryContentInJSON(path)
+		cont, status := content.GetDirectoryContentInJSON(path)
 		if cont != nil {
 			w.Header().Set("Content-Type", "application/json")
 			json.NewEncoder(w).Encode(cont)
