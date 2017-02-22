@@ -7,9 +7,20 @@ import (
 	"net/http"
 
 	"github.com/paaff/Filly/files"
+	"github.com/spf13/viper"
 )
 
 func main() {
+	// Load configuration file
+	viper.SetConfigName("fillyExampleConf")
+	viper.SetConfigType("json")
+	viper.AddConfigPath("./config")
+	vErr := viper.ReadInConfig()
+	if vErr != nil {
+		panic(fmt.Errorf("Fatal error config file: %s \n", vErr))
+	} else {
+		dirContent.ROOT_DIR = viper.GetString("root_dir")
+	}
 
 	// Create a simple file server
 	fs := http.FileServer(http.Dir("./web/dist"))
