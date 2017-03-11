@@ -1,13 +1,12 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
 
+	"github.com/paaff/Filly/api"
 	"github.com/paaff/Filly/error"
-	"github.com/paaff/Filly/files"
 	"github.com/spf13/viper"
 )
 
@@ -20,7 +19,7 @@ func main() {
 	http.Handle("/", fs)
 
 	// GetDir endpoint
-	http.Handle("/browse", errorhandler.AppHandler(browseHandler))
+	http.Handle("/browse", errorhandler.AppHandler(api.BrowseHandler))
 
 	err := http.ListenAndServe(":1337", nil)
 	if err != nil {
@@ -38,21 +37,6 @@ func loadConfig() {
 	if err != nil {
 		panic(fmt.Errorf("Fatal error config file: %s", err))
 	} else {
-		content.RootDir = viper.GetString("root_dir")
+		api.RootDir = viper.GetString("root_dir")
 	}
-}
-
-func browseHandler(w http.ResponseWriter, r *http.Request) *errorhandler.AppError {
-	if r.Method == "POST" {
-		path := r.FormValue("path")
-		// Browse from the POST form variable
-		cont, err := content.GetDirectoryContentInJSON(path)
-		if err != nil {
-			return err
-		}
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(cont)
-
-	}
-	return nil
 }
