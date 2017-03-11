@@ -2,13 +2,14 @@ package errorhandler
 
 import "net/http"
 
-// Custom error created for handling HTTP errors more fluently.
+// AppError - Custom error created for handling HTTP errors more fluently.
 type AppError struct {
 	Error   error
 	Message string
 	Code    int
 }
 
+// AppHandler - Handler.
 type AppHandler func(http.ResponseWriter, *http.Request) *AppError
 
 func (fn AppHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {

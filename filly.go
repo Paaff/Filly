@@ -36,9 +36,9 @@ func loadConfig() {
 	viper.AddConfigPath("./config")
 	err := viper.ReadInConfig()
 	if err != nil {
-		panic(fmt.Errorf("Fatal error config file: %s \n", err))
+		panic(fmt.Errorf("Fatal error config file: %s", err))
 	} else {
-		content.ROOT_DIR = viper.GetString("root_dir")
+		content.RootDir = viper.GetString("root_dir")
 	}
 }
 
