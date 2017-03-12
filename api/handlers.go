@@ -2,6 +2,7 @@ package api
 
 import (
 	"encoding/json"
+	"io"
 	"net/http"
 
 	"github.com/paaff/Filly/error"
@@ -10,15 +11,9 @@ import (
 // BrowseHandler - Handler for browsing calls.
 func BrowseHandler(w http.ResponseWriter, r *http.Request) *errorhandler.AppError {
 	if r.Method == "POST" {
+		path := apiCallDecode(r.Body)
 
-		decoder := json.NewDecoder(r.Body)
-		var path io
-		jErr := decoder.Decode(&path)
-		if jErr != nil {
-			panic(jErr) // TODO: Correct error handling please.
-		}
-
-		// Browse from the POST form variable
+		// Browse from the given path.
 		cont, err := GetDirectoryContentInJSON(path.Source)
 		if err != nil {
 			return err
@@ -30,8 +25,34 @@ func BrowseHandler(w http.ResponseWriter, r *http.Request) *errorhandler.AppErro
 	return nil
 }
 
+// RemoveHandler - Handler for removing folder/files.
+func RemoveHandler(w http.ResponseWriter, r *http.Request) *errorhandler.AppError {
+	if r.Method == "POST" {
+
+		path := apiCallDecode(r.Body)
+
+		// Remove from the given path.
+		err := DeleteSelectedContentFromDir(path.Source)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Endpoint JSON decoder
+func apiCallDecode(body io.ReadCloser) iocall {
+	var path iocall
+	decoder := json.NewDecoder(body)
+	jErr := decoder.Decode(&path)
+	if jErr != nil {
+		panic(jErr) // TODO: Correct error handling please.
+	}
+	return path
+}
+
 // Path struct for unmarshalling JSON array of paths.
-type io struct {
+type iocall struct {
 	Source      string `json:"src"`
 	Destination string `json:"dst"`
 }

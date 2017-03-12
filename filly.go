@@ -22,6 +22,7 @@ func main() {
 	mux := http.NewServeMux()
 	http.Handle("/api/", http.StripPrefix("/api", mux))
 	mux.Handle("/browse", errorhandler.AppHandler(api.BrowseHandler))
+	mux.Handle("/remove", errorhandler.AppHandler(api.RemoveHandler))
 
 	err := http.ListenAndServe(":1337", nil)
 	if err != nil {

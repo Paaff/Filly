@@ -2,6 +2,7 @@ package api
 
 import (
 	"io/ioutil"
+	"os"
 	"path/filepath"
 	"strings"
 
@@ -56,21 +57,22 @@ func GetDirectoryContentInJSON(dir string) ([]Content, *errorhandler.AppError) {
 	return listOfContent, nil
 }
 
-// Delete user-chosen content from given directory.
-/*func deleteSelectedContentFromDir(jsonSelected []byte) bool {
-	var paths []Path
-	jsonErr := json.Unmarshal(jsonSelected, &paths) //TODO: Use Decoder
-	if jsonErr != nil {
-		log.Fatal(jsonErr)
+// DeleteSelectedContentFromDir - Delete user-chosen content from given directory.
+func DeleteSelectedContentFromDir(removeDir string) *errorhandler.AppError {
+	// Check if the path is valid.
+	fullDir := filepath.Join(RootDir, removeDir)
+	if _, err := os.Stat(fullDir); os.IsNotExist(err) {
+		return &errorhandler.AppError{Error: err, Message: "Path does not exist", Code: 404} // Status: Not Found
 	}
 
+	// TODO: Revise the 401 error code.
 	// Run through the paths and delete them.
-	for n := range paths {
-		err := os.Remove(paths[n].Path)
-		if err != nil {
-			log.Fatal(err)
-			return false
-		}
+	err := os.RemoveAll(removeDir)
+	if err != nil {
+		return &errorhandler.AppError{Error: err, Message: "Error in removing", Code: 401} // Status: Not Found
 	}
-	return true
-}*/
+	// No error means everything was deleted correctly.
+	// TODO: Should make sure it deletes from valid paths within the system.
+
+	return nil
+}
