@@ -18,8 +18,10 @@ func main() {
 	fs := http.FileServer(http.Dir("./web/dist"))
 	http.Handle("/", fs)
 
-	// GetDir endpoint
-	http.Handle("/browse", errorhandler.AppHandler(api.BrowseHandler))
+	// Endpoints
+	mux := http.NewServeMux()
+	http.Handle("/api/", http.StripPrefix("/api", mux))
+	mux.Handle("/browse", errorhandler.AppHandler(api.BrowseHandler))
 
 	err := http.ListenAndServe(":1337", nil)
 	if err != nil {
